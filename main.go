@@ -31,6 +31,10 @@ var custom_db = map[string]customer{
 	"3": customer3,
 }
 
+func showProjectInfo(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "project_info.html")
+}
+
 func getCustomers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -101,6 +105,7 @@ func main() {
 	fmt.Println()
 
 	router := mux.NewRouter()
+	http.HandleFunc("/", showProjectInfo)
 	router.HandleFunc("/customers", getCustomers).Methods("GET")
 	router.HandleFunc("/customers/{id}", getCustomer).Methods("GET")
 	router.HandleFunc("/customers/{id}", deleteCustomer).Methods("DELETE")
