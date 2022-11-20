@@ -50,6 +50,8 @@ func getCustomer(w http.ResponseWriter, r *http.Request) {
 	if _, ok := custom_db[id]; ok {
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(custom_db[id])
+	}else {
+		w.WriteHeader(http.StatusNotFound)
 	}
 }
 
@@ -111,6 +113,7 @@ func main() {
 	router.HandleFunc("/customers/{id}", deleteCustomer).Methods("DELETE")
 	router.HandleFunc("/customers/{id}", updateCustomer).Methods("POST")
 	router.HandleFunc("/customers", addCustomer).Methods("POST")
+	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
 	fmt.Println("Server is starting on port 3002...")
 	log.Fatal(http.ListenAndServe(":3002", router))
 
